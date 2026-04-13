@@ -1,5 +1,6 @@
-import { hashPassword } from "@/app/lib/auth";
+import { generateToken, hashPassword } from "@/app/lib/auth";
 import { prisma } from "@/app/lib/db";
+import { Role } from "@/app/types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -48,5 +49,48 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await hashPassword(password);
 
     // first user become admin , others become user
-  } catch (error) {}
+    const userCount = await prisma.user.count();
+    const role = userCount===0 ? Role.ADMIN : Role.USER;
+    const user = await prisma.user.create({
+      data:{
+        name,
+        email,
+        password:hashedPassword,
+        role,
+        teamId
+      },
+      include:{
+        team:true,
+      }
+    });
+
+    // generate token 
+    const token = generateToken(user.id);
+
+    //create response
+    const response = NextResponse.json({
+      user:{
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        teamId: user.teamId,
+        team: user.team,
+        token,
+      }
+    })
+
+    response.cookies.set("token" , token , {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60*60*24*7,
+    });
+    return response;
+  } catch (error) {
+    console.log("Registration failed!");
+    return NextResponse.json({
+      error:"Internal server error",
+    },{status:500});
+  }
 }
