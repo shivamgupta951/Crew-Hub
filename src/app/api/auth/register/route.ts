@@ -31,45 +31,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let teamId :string | undefined;
+    let teamId: string | undefined;
     if (teamCode) {
       const team = await prisma.team.findUnique({
         where: { code: teamCode },
       });
 
-      if(!team)
-      {
-        return NextResponse.json({
-            error: "Plese enter a valid team code"
-        },{status:400})
+      if (!team) {
+        return NextResponse.json(
+          {
+            error: "Plese enter a valid team code",
+          },
+          { status: 400 },
+        );
       }
-      teamId = team.id
+      teamId = team.id;
     }
 
     const hashedPassword = await hashPassword(password);
 
     // first user become admin , others become user
     const userCount = await prisma.user.count();
-    const role = userCount===0 ? Role.ADMIN : Role.USER;
+    const role = userCount === 0 ? Role.ADMIN : Role.USER;
     const user = await prisma.user.create({
-      data:{
+      data: {
         name,
         email,
-        password:hashedPassword,
+        password: hashedPassword,
         role,
-        teamId
+        teamId,
       },
-      include:{
-        team:true,
-      }
+      include: {
+        team: true,
+      },
     });
 
-    // generate token 
+    // generate token
     const token = generateToken(user.id);
 
     //create response
     const response = NextResponse.json({
-      user:{
+      user: {
         id: user.id,
         email: user.email,
         name: user.name,
@@ -77,20 +79,23 @@ export async function POST(request: NextRequest) {
         teamId: user.teamId,
         team: user.team,
         token,
-      }
-    })
+      },
+    });
 
-    response.cookies.set("token" , token , {
+    response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60*60*24*7,
+      maxAge: 60 * 60 * 24 * 7,
     });
     return response;
   } catch (error) {
-    console.log("Registration failed!");
-    return NextResponse.json({
-      error:"Internal server error",
-    },{status:500});
+    console.error("Registration failed:", error);
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+      },
+      { status: 500 },
+    );
   }
 }
