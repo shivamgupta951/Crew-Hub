@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
         role: true,
         team: {
           select: {
-            if: true,
+            id: true,
             name: true,
           },
         },
