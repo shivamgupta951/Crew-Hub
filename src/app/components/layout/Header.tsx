@@ -34,8 +34,8 @@ const Header = ({ user }: HeaderProps) => {
       <div className="flex items-center space-x-5">
         {navigation.map((item) => (
           <Link
-            href={item.href}
-            key={item.name}
+            href={item.href} 
+            key={item.name} 
             className={getNavItemClass(item.href)}
           >
             {item.name}

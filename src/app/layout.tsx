@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AuthProvider from "./provider/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Crew Hub",
@@ -13,8 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
-      <body className="min-h-screen bg-slate-950 text-slate-500">{children}</body>
+    <html lang="en">
+      <body className="min-h-screen bg-slate-950 text-slate-500">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
