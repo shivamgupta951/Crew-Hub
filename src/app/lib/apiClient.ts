@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 class ApiClient {
   private baseUrl: string;
@@ -29,6 +29,7 @@ class ApiClient {
         .catch(() => ({ error: "Network error" }));
       throw new Error(error.error || "Request failed");
     }
+    return response.json();
   }
 
   // auth methods
