@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@/app/provider/AuthProvider";
 import { User } from "@/app/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,6 +11,7 @@ interface HeaderProps {
 }
 
 const Header = ({ user }: HeaderProps) => {
+  const {logout} = useAuth();
   const pathName = usePathname();
   const navigation = [
     { name: "Home", href: "/", show: true },
@@ -45,12 +47,12 @@ const Header = ({ user }: HeaderProps) => {
       {/* Auth Navigation */}
       {user ? (
         <div className="flex items-center space-x-5">
-          <div className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer underline">
-            Shivam ~ User
+          <div className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer ">
+            {user.email} ~ ({user.role})
           </div>
           <div
-            // onClick={}
-            className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer underline"
+            onClick={logout}
+            className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer "
           >
             logout
           </div>
@@ -59,13 +61,13 @@ const Header = ({ user }: HeaderProps) => {
         <div className="flex items-center space-x-5">
           <Link
             href="/login"
-            className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer underline"
+            className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer "
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer underline"
+            className="px-3 py-2 rounded text-sm font-medium transition-colors text-slate-300 hover:bg-slate-800 hover:text-white cursor-pointer "
           >
             Register
           </Link>
