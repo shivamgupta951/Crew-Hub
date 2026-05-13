@@ -61,7 +61,7 @@ const AdminDashboard = ({ users, teams, currentUser }: AdminDashboardProps) => {
           <span>Admin Dashboard</span>
 
           <span className="text-sm text-gray-400 font-medium">
-            User And Team Management
+            User And Team Management!
           </span>
         </div>
       </div>

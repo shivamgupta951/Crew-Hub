@@ -20,7 +20,7 @@ const ManagerDashboard = ({
           <span>Manager Dashboard</span>
 
           <span className="text-sm text-gray-400 font-medium">
-            Team Management View
+            Team Management View!
           </span>
         </div>
       </div>
@@ -28,9 +28,43 @@ const ManagerDashboard = ({
       {/* Main Section */}
       <div className="container mx-auto">
         <div className="grid grid-cols-2 gap-3">
-          <div className="border bg-gray-800">
-            <div className="border-b p-2">
-              <div>Team Members ({myTeamMembers.length})</div>
+          <div className="border border-gray-500 bg-gray-800 rounded-md">
+            <div className="border-b p-3">
+              <div className="font-bold text-green-300">
+                Team Members ({myTeamMembers.length})
+              </div>
+            </div>
+            <div>
+              {myTeamMembers.map((item) => (
+                <div className="border-b border-gray-700 px-4 p-2">
+                  <div>{item.name}</div>
+                  <div className="flex text-[70%] text-gray-400 space-x-1">
+                    <div>{item.email}</div> *{" "}
+                    <div className="mx-1">{item.role}</div> *{" "}
+                    <div className="mx-1">{item.team?.code}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="border border-gray-500 bg-gray-800 rounded-md">
+            <div className="border-b p-3">
+              <div className="font-bold text-green-300">
+                Teams ({allTeamMembers.length})
+              </div>
+            </div>
+            <div>
+              {allTeamMembers.map((item) => (
+                <div className="border-b border-gray-700 px-4 p-2">
+                  <div>{item.name}</div>
+                  <div className="flex text-[70%] text-gray-400 space-x-1">
+                    <div>{item.email}</div> *{" "}
+                    <div className="mx-1">{item.role}</div> *{" "}
+                    <div className="mx-1">{item.team?.code}</div> *
+                    <div className="mx-1">{item.team?.name}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
