@@ -1,6 +1,8 @@
+import ManagerDashboard from "@/app/components/dashboard/ManagerDashboard";
 import { checkUserPermission, getCurrentUser } from "@/app/lib/auth";
 import { prisma } from "@/app/lib/db";
-import { Role } from "@/app/types";
+import { transformUsers } from "@/app/lib/util";
+import { Role, User } from "@/app/types";
 import { redirect } from "next/navigation";
 import React, { use } from "react";
 
@@ -12,7 +14,7 @@ const ManagerPage = async () => {
 
   // fetch data for manager dashbaord (Team Members only)!
   const prismaMyTeamMembers = user.teamId
-    ? prisma.user.findMany({
+    ? await prisma.user.findMany({
         where: {
           teamId: user.teamId,
           role: { not: Role.ADMIN },
@@ -24,7 +26,7 @@ const ManagerPage = async () => {
     : [];
 
   // fetch data for manager dashbaord (Other team members excluding sensitive data)!
-  const prismaAllMembers = prisma.user.findMany({
+  const prismaAllMembers = await prisma.user.findMany({
     where: {
       role: { not: Role.ADMIN },
     },
@@ -42,11 +44,12 @@ const ManagerPage = async () => {
       teamId: "desc",
     },
   });
-
+  const myTeamMembers = transformUsers(prismaMyTeamMembers);
+  const allTeamMembers = transformUsers(prismaAllMembers);
   return (
     <ManagerDashboard
-      myTeamMembers={prismaMyTeamMembers}
-      allTeamMembers={prismaAllMembers}
+      myTeamMembers={myTeamMembers as User[]}
+      allTeamMembers={allTeamMembers as User[]}
       currentUser={user}
     />
   );

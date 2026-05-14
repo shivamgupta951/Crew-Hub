@@ -28,7 +28,7 @@ const LoginPage = () => {
   );
   return (
     <div className="bg-slate-800 p-8 rounded-lg border border-slate-700 w-full max-w-md">
-      <form action={LoginAction}>
+      <form action={LoginAction} suppressHydrationWarning>
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-white">
             Sign In To Your Account
@@ -60,6 +60,7 @@ const LoginPage = () => {
               id="email"
               autoComplete="email"
               required
+              suppressHydrationWarning
               className="w-full px-3 py-2 rounded-md bg-slate-900 border border-slate-700 focus:ring-2"
               placeholder="Enter Your email"
             />
@@ -77,6 +78,7 @@ const LoginPage = () => {
               id="password"
               autoComplete="new-password"
               required
+              suppressHydrationWarning
               className="w-full px-3 py-2 rounded-md bg-slate-900 border border-slate-700 focus:ring-2"
               placeholder="Create a password"
             />
@@ -85,6 +87,7 @@ const LoginPage = () => {
         <button
           type="submit"
           disabled={isPending}
+          suppressHydrationWarning
           className=" flex justify-center items-center rounded-md w-full border bg-blue-700 py-2 mt-5 cursor-pointer hover:scale-105 duration-500"
         >
           {isPending ? "Signing In..." : "Sign In"}

@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 class ApiClient {
   private baseUrl: string;
@@ -29,6 +29,7 @@ class ApiClient {
         .catch(() => ({ error: "Network error" }));
       throw new Error(error.error || "Request failed");
     }
+    return response.json();
   }
 
   // auth methods
@@ -63,14 +64,14 @@ class ApiClient {
 
   //Admin Methods
   async updateUserRole(userId: string, role: string) {
-    return this.request(`/api/users/${userId}/role`, {
+    return this.request(`/api/user/${userId}/role`, {
       method: "PATCH",
       body: JSON.stringify({ role }),
     });
   }
 
-  async assignUserToTeam(userId: string, teamId: string) {
-    return this.request(`/api/users/${userId}/team`, {
+  async assignUserToTeam(userId: string, teamId: string | null) {
+    return this.request(`/api/user/${userId}/team`, {
       method: "PATCH",
       body: JSON.stringify({ teamId }),
     });

@@ -1,9 +1,13 @@
-"use client";
 import Header from "../components/layout/Header";
-import { apiClient } from "../lib/apiClient";
+import { getCurrentUser } from "../lib/auth";
 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
-  const user = await apiClient.getCurrentUser();
+  let user = null;
+  try {
+    user = await getCurrentUser();
+  } catch (error) {
+    console.error("Failed to fetch current user:", error);
+  }
 
   return (
     <>
